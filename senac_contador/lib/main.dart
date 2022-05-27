@@ -18,9 +18,9 @@ class App extends StatelessWidget {
 
 ButtonStyle _buttonStyle = TextButton.styleFrom(
   backgroundColor: Colors.black,
-  primary: Colors.black,
+  primary: Colors.white,
   onSurface: Colors.black,
-  shape: const BeveledRectangleBorder(),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
 );
 
 Text _whiteText(String text) {
@@ -30,63 +30,102 @@ Text _whiteText(String text) {
   );
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int count = 0;
+
+  String statePhrase() {
+    return count < 10 ? 'Pode entrar' : 'Lotado';
+  }
+
+  void abandonouEstabelecimento() {
+    if (count == 0) {
+      return;
+    }
+
+    count--;
+  }
+
+  void entrouEstabelecimento() {
+    count++;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      style: _buttonStyle,
-                      child: _whiteText("Alinhado a esquerda"),
-                    )
-                  ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: const BorderSide(color: Colors.black, width: 3),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      style: _buttonStyle,
-                      child: _whiteText("Centro"),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    statePhrase(),
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
-                    TextButton(
-                      onPressed: () {},
+                  ),
+                ),
+              ),
+              Text(
+                '$count',
+                style:
+                    const TextStyle(fontSize: 128, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    height: 80,
+                    width: 80,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          entrouEstabelecimento();
+                        });
+                      },
                       style: _buttonStyle,
-                      child: _whiteText("Centro"),
+                      child: _whiteText("Entrou"),
                     ),
-                    TextButton(
-                      onPressed: () {},
+                  ),
+                  SizedBox(
+                    height: 80,
+                    width: 80,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          abandonouEstabelecimento();
+                        });
+                      },
                       style: _buttonStyle,
-                      child: _whiteText("Centro"),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      style: _buttonStyle,
-                      child: _whiteText("Centro"),
-                    )
-                  ],
-                ),
-                const Text("Pode Entrar",
-                    style: TextStyle(
-                        fontSize: 32,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold)),
-                const Text("0")
-              ],
-            )));
+                      child: _whiteText("Saiu"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
