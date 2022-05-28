@@ -39,13 +39,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int count = 0;
+  bool get isEmpty => count == 0;
+  bool get isFull => count == 15;
 
   String statePhrase() {
-    return count < 10 ? 'Pode entrar' : 'Lotado';
+    return !isFull ? 'Pode entrar' : 'Lotado';
   }
 
   void abandonouEstabelecimento() {
-    if (count == 0) {
+    if (isEmpty) {
       return;
     }
 
@@ -53,6 +55,10 @@ class _HomeState extends State<Home> {
   }
 
   void entrouEstabelecimento() {
+    if (isFull) {
+      return;
+    }
+
     count++;
   }
 
